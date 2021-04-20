@@ -6,6 +6,9 @@ import (
 	"log"
 )
 
+/**
+	get请求，URL后缀参数接收方式
+ */
 func main() {
 	r := gin.Default()
 

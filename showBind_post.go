@@ -6,6 +6,9 @@ import (
 	"log"
 )
 
+/**
+	post请求 注册表单form数据提交参数接收方式
+ */
 func main() {
 	engine := gin.Default()
 
