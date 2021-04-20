@@ -27,7 +27,7 @@ func main() {
 		}
 
 		fmt.Println("姓名：" , person.Name)
-		fmt.Println("年龄：" , person.Age)
+		//fmt.Println("年龄：" , person.Age)
 		fmt.Println("性别：" , person.Sex)
 
 		context.Writer.Write([]byte("添加记录：" + person.Name))
@@ -39,5 +39,5 @@ func main() {
 type Person struct {
 	Name string `form:"name"`
 	Sex string `form:"sex"`
-	Age int `form:"age"`
+	Age string `form:"age"`
 }
