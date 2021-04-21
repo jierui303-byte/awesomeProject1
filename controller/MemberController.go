@@ -4,7 +4,6 @@ import (
 	"awesomeProject1/service"
 
 	"github.com/gin-gonic/gin"
-	"github.com/micro/go-micro/store/service"
 )
 
 type MemberController struct {
@@ -27,6 +26,7 @@ func (mc *MemberController) sendSmsCode(context *gin.Context) {
 	}
 
 	//实例化服务层MemberService
+	//service是上面import引入的service包
 	ms := service.MemberService{}
 	//调用发送短信的服务层方法
 	isSend := ms.Sendcode(phone)

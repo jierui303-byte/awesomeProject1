@@ -5,6 +5,7 @@ import (
 	"awesomeProject1/tool"
 
 	"github.com/gin-gonic/gin"
+	"github.com/micro/go-micro/v2/logger"
 )
 
 func main() {
@@ -13,6 +14,13 @@ func main() {
 	cfg, err := tool.ParseConfig("./config/app.json")
 	if err != nil {
 		panic(err.Error())
+	}
+
+	//初始化orm对象
+	_, err = tool.OrmEngine(cfg)
+	if err != nil {
+		logger.Error(err.Error())
+		return
 	}
 
 	app := gin.Default()

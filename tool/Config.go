@@ -7,11 +7,12 @@ import (
 )
 
 type Config struct {
-	AppName string    `json:"app_name"`
-	APPMode string    `json:"app_mode"`
-	APPHost string    `json:"app_host"`
-	APPPort string    `json:"app_port"`
-	Sms     SmsConfig `json:"sms"`
+	AppName  string         `json:"app_name"`
+	APPMode  string         `json:"app_mode"`
+	APPHost  string         `json:"app_host"`
+	APPPort  string         `json:"app_port"`
+	Sms      SmsConfig      `json:"sms"`
+	Database DatabaseConfig `json:"database"`
 }
 
 type SmsConfig struct {
@@ -20,6 +21,17 @@ type SmsConfig struct {
 	RegionId     string `json:"region_id"`
 	AppKey       string `json:"app_key"`
 	AppSecret    string `json:"app_srcret"`
+}
+
+type DatabaseConfig struct {
+	Driver   string `json:"driver"`
+	User     string `json:"user"`
+	Password string `json:"password"`
+	Host     string `json:"host"`
+	Port     string `json:"port"`
+	DbName   string `json:"db_name"`
+	Charset  string `json:"charset"`
+	ShowSql  bool   `json:"show_sql"`
 }
 
 var _cfg *Config = nil

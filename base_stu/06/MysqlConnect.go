@@ -9,7 +9,8 @@ import (
 )
 
 /**
-gin中操作数据库的驱动包有多个：gorm, sql
+gin中操作数据库的驱动包有多个：gorm, xorm, sql
+	xorm是一个比较流行的数据库操作orm框架
 	使用GORM操作数据库：go get -u github.com/jinzhu/gorm
 	sql: go get -u github.com/go-sql-driver/mysql
 */

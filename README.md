@@ -26,4 +26,12 @@ git remote add origin git@github.com:jierui303-byte/go_gin_web
 go get -u github.com/aliyun/alibaba-cloud-sdk-go
 ~~~~
 
-
+~~~~
+#安装xorm操作数据库的orm框架
+go get -u github.com/go-xorm/xorm
+go mod download github.com/jmespath/go-jmespat
+go get github.com/micro/go-micro/store/service
+go get github.com/micro/go-micro/v2/logger
+go mod download github.com/modern-go/concurrent
+go mod download gopkg.in/ini.v1
+~~~~

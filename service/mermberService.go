@@ -1,6 +1,8 @@
 package service
 
 import (
+	"awesomeProject1/dao"
+	"awesomeProject1/model"
 	"awesomeProject1/tool"
 	"encoding/json"
 	"fmt"
@@ -26,6 +28,7 @@ func (ms *MemberService) Sendcode(phone string) bool {
 	//2. 调用阿里云sdk, 完成发送
 	client, err := dysmsapi.NewClientWithAccessKey(config.Sms.RegionId, config.Sms.AppKey, config.Sms.AppSecret)
 	if err != nil {
+		//logger记录错误日志
 		logger.Error(err.Error())
 		return false
 	}
@@ -48,7 +51,24 @@ func (ms *MemberService) Sendcode(phone string) bool {
 		logger.Error(err.Error())
 		return false
 	}
+	//短信验证码发送成功
 	if response.Code == "ok" {
+		//将验证码保存到数据库中
+		smsCode := model.SmsCode{
+			Phone:      phone,
+			Code:       code,
+			BizId:      response.BizId,
+			CreateTime: time.Now().Unix(),
+		}
+
+		//实例化数据库dao层进行数据库数据写入操作InsertCode
+		//tool.DbEngine实际上是orm实例化对象
+		memberDao := dao.MemberDao{tool.DbEngine}
+		result := memberDao.InsertCode(smsCode)
+		if result < 0 {
+			return false
+		}
+
 		return true
 	}
 

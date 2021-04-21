@@ -9,5 +9,15 @@
         "app_key" : "Ltxxxxxxx",
         "app_secret" : "ZHxxxxxxx",
         "region_id" : "cn-hangzhou"
+    },
+    "database" : {
+        "driver" : "mysql",
+        "user" : "root",
+        "password" : "12345678",
+        "host" : "127.0.0.1",
+        "port" : "3306",
+        "db_name" : "ginsql",
+        "charset" : "utf8",
+        "show_sql" : true   
     }
 }
