@@ -21,7 +21,9 @@ git remote add origin git@github.com:jierui303-byte/go_gin_web
 `go get gopkg.in/mgo.v2`
 ~~~~
 
-
-
+~~~~
+#接入阿里云短信平台
+go get -u github.com/aliyun/alibaba-cloud-sdk-go
+~~~~
 
 

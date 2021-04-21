@@ -17,6 +17,7 @@ func main() {
 
 	app := gin.Default()
 
+	//路由调用
 	registerRouter(app)
 
 	app.Run(cfg.APPHost + ":" + cfg.APPPort)
@@ -24,5 +25,9 @@ func main() {
 
 //路由设置
 func registerRouter(router *gin.Engine) {
+	//hello控制器
 	new(controller.HelloController).Router(router)
+
+	//member控制器
+	new(controller.MemberController).Router(router)
 }
