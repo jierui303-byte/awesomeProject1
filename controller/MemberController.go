@@ -4,6 +4,7 @@ import (
 	"awesomeProject1/param"
 	"awesomeProject1/service"
 	"awesomeProject1/tool"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,7 +15,33 @@ type MemberController struct {
 func (mc *MemberController) Router(engine *gin.Engine) {
 	//解析接口地址
 	engine.GET("/api/sendcode", mc.sendSmsCode)
-	engine.OPTIONS("/api/login_sms", mc.smsLogin)
+	engine.OPTIONS("/api/login_sms", mc.smsLogin)//手机验证码登录注册
+	engine.GET("/api/captcha", mc.captcha)//生成验证码图片
+	engine.POST("/api/vertifycha", mc.vertifyCaptcha)//校验验证码图片是否正确
+}
+
+//生成验证码
+func (mc *MemberController) captcha(context *gin.Context){
+	//todo:生成验证码图片
+	tool.GenerateCaptcha(context)
+}
+
+//验证验证码是否正确
+func (mc *MemberController) vertifyCaptcha(context *gin.Context){
+	//接收客户端传输过来的参数
+	var captcha tool.CaptchaResult
+	err := tool.Decode(context.Request.Body, &captcha)
+	if err != nil {
+		tool.Failed(context, "参数解析失败")
+		return
+	}
+
+	result := tool.VertifyCaptcha(captcha.Id, captcha.VertifyValue)
+	if result{
+		fmt.Println("验证通过")
+	} else {
+		fmt.Println("验证失败")
+	}
 }
 
 //发送短信验证码方法 http://127.0.0.1:8090/api/sendcode?phone=13523419148

@@ -19,20 +19,23 @@ func main() {
 		panic(err.Error())
 	}
 
-	//初始化orm对象
+	//实例化数据库 初始化orm对象
 	_, err = tool.OrmEngine(cfg)
 	if err != nil {
 		logger.Error(err.Error())
 		return
 	}
 
-	app := gin.Default()
+	//实例化redis配置
+	tool.InitRedisStore()
 
-	//路由调用
-	registerRouter(app)
+	app := gin.Default()
 
 	//设置全局跨域访问，调用中间件
 	app.Use(Cors())
+
+	//路由调用
+	registerRouter(app)
 
 	app.Run(cfg.APPHost + ":" + cfg.APPPort)
 }

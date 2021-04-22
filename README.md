@@ -35,3 +35,10 @@ go get github.com/micro/go-micro/v2/logger
 go mod download github.com/modern-go/concurrent
 go mod download gopkg.in/ini.v1
 ~~~~
+
+~~~~
+#图形验证码
+go get -u github.com/mojocn/base64Captcha
+#安装最新版本验证码包会有部分函数不支持，需降到1.2.2版本
+go mod edit -replace=github.com/mojocn/base64Captcha@v1.3.1=github.com/mojocn/base64Captcha@v1.2.2
+~~~~

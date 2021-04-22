@@ -13,6 +13,7 @@ type Config struct {
 	APPPort  string         `json:"app_port"`
 	Sms      SmsConfig      `json:"sms"`
 	Database DatabaseConfig `json:"database"`
+	RedisConfig RedisConfig `json:"redis-config"`
 }
 
 type SmsConfig struct {
@@ -32,6 +33,13 @@ type DatabaseConfig struct {
 	DbName   string `json:"db_name"`
 	Charset  string `json:"charset"`
 	ShowSql  bool   `json:"show_sql"`
+}
+
+type RedisConfig struct {
+	Addr string `json:"addr"`
+	Port string `json:"port"`
+	Password string `json:"password"`
+	Db int `json:"db"`
 }
 
 var _cfg *Config = nil
