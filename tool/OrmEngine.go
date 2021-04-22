@@ -32,7 +32,7 @@ func OrmEngine(cfg *Config) (*Orm, error) {
 	engine.ShowSQL(databaseInfo.ShowSql)
 
 	//把数据库字段结构体model.SmsCode映射转变成数据库里面的一张表
-	err = engine.Sync2(new(model.SmsCode))
+	err = engine.Sync2(new(model.SmsCode), new(model.Member))
 	if err != nil {
 		return nil, err
 	}

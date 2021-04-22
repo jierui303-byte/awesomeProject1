@@ -3,6 +3,7 @@ package service
 import (
 	"awesomeProject1/dao"
 	"awesomeProject1/model"
+	"awesomeProject1/param"
 	"awesomeProject1/tool"
 	"encoding/json"
 	"fmt"
@@ -17,7 +18,38 @@ import (
 type MemberService struct {
 }
 
-//定义
+//定义手机+验证码实现登录的方法
+func (ms *MemberService) SmsLogin(loginParam param.SmsLoginParam) *model.Member{
+	//完成用户登录成功状态修改过程
+
+	//1.获取到手机号和验证码
+
+	//2.验证手机号+验证码是否正确
+	md := dao.MemberDao{}
+	sms := md.ValidateSmsCode(loginParam.Phone, loginParam.Code)
+	if sms.Id == 0 {
+		return nil
+	}
+
+	//3.根据手机号member表中查询记录
+	member := md.QueryByPhone(loginParam.Phone)
+	if member.Id != 0 {
+		//代表会员存在
+		return member
+	}
+
+	//4.新建一个member记录，并保存
+	user := model.Member{}
+	user.UserName = "wxxxxx"
+	user.Mobile = "13523419148"
+	user.RegisterTime = time.Now().Unix()
+
+	user.Id = md.InsertMember(user)
+
+	return &user
+}
+
+//定义发送短信的方法
 func (ms *MemberService) Sendcode(phone string) bool {
 	//获取全局config数据
 	config := tool.GetConfig()
