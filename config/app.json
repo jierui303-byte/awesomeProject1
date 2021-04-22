@@ -13,9 +13,9 @@
     "database" : {
         "driver" : "mysql",
         "user" : "root",
-        "password" : "12345678",
+        "password" : "root",
         "host" : "127.0.0.1",
-        "port" : "3306",
+        "port" : "8889",
         "db_name" : "ginsql",
         "charset" : "utf8",
         "show_sql" : true   
