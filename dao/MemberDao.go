@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/micro/go-micro/v2/logger"
+	"github.com/micro/go-micro/v2/util/log"
 )
 
 //结构体绑定orm对象
@@ -13,8 +14,23 @@ type MemberDao struct {
 	*tool.Orm
 }
 
+//根据用户名和密码查询用户信息
+func (md *MemberDao) Query(name string, password string) *model.Member {
+	var member model.Member
+
+	password = tool.EncoderSha256(password)
+
+	_, err := md.Where("user_name = ? and password = ? ", name, password).Get(&member)
+	if err != nil {
+		log.Error(err.Error())
+		return nil
+	}
+
+	return &member
+}
+
 //验证手机号和验证码是否存在
-func (md *MemberDao) ValidateSmsCode(phone string, code string) *model.SmsCode{
+func (md *MemberDao) ValidateSmsCode(phone string, code string) *model.SmsCode {
 	var sms model.SmsCode
 
 	//查询是否存在这条记录
@@ -26,7 +42,7 @@ func (md *MemberDao) ValidateSmsCode(phone string, code string) *model.SmsCode{
 }
 
 //根据手机号查询会员信息
-func (md *MemberDao) QueryByPhone(phone string) *model.Member{
+func (md *MemberDao) QueryByPhone(phone string) *model.Member {
 	var member model.Member
 
 	if _, err := md.Where("mobile = ?", phone).Get(&member); err != nil {

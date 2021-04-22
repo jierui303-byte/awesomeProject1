@@ -18,8 +18,31 @@ import (
 type MemberService struct {
 }
 
+//定义 手机+密码+验证码登录的方法
+func (ms *MemberService) Login(name string, password string) *model.Member {
+	//两种情况：用户存在/用户为新用户
+	//1.使用用户名+密码查询用户信息 如果存在，直接返回
+	md := dao.MemberDao{tool.DbEngine}
+	member := md.Query(name, password)
+	if member.Id != 0 {
+		return member
+	}
+
+	//2.不存在，用户作为新用户插入新增，再返回
+	user := model.Member{}
+	user.UserName = name
+	user.Password = tool.EncoderSha256(password) //密码加密
+	user.RegisterTime = time.Now().Unix()
+
+	//执行插入新用户
+	result := md.InsertMember(user)
+	user.Id = result
+
+	return &user
+}
+
 //定义手机+验证码实现登录的方法
-func (ms *MemberService) SmsLogin(loginParam param.SmsLoginParam) *model.Member{
+func (ms *MemberService) SmsLogin(loginParam param.SmsLoginParam) *model.Member {
 	//完成用户登录成功状态修改过程
 
 	//1.获取到手机号和验证码

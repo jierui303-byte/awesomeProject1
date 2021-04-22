@@ -22,6 +22,8 @@ func InitRedisStore() *RedisStore {
 
 	RedisStore := RedisStore{client: client}
 
+	//设定把验证码永久性存储到redis中，便于后面进行验证码校验，验证码永久存储在redis中，随时可以进行校验
+	//这是base64Captcha这个包封装好的功能：看tool/Captcha.go中的代码就知道了 vertifyResult := base64Captcha.VerifyCaptcha(id, value)
 	base64Captcha.SetCustomStore(&RedisStore)
 
 	return &RedisStore

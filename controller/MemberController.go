@@ -15,19 +15,50 @@ type MemberController struct {
 func (mc *MemberController) Router(engine *gin.Engine) {
 	//解析接口地址
 	engine.GET("/api/sendcode", mc.sendSmsCode)
-	engine.OPTIONS("/api/login_sms", mc.smsLogin)//手机验证码登录注册
-	engine.GET("/api/captcha", mc.captcha)//生成验证码图片
-	engine.POST("/api/vertifycha", mc.vertifyCaptcha)//校验验证码图片是否正确
+	engine.OPTIONS("/api/login_sms", mc.smsLogin)     //手机验证码登录注册
+	engine.GET("/api/captcha", mc.captcha)            //生成验证码图片
+	engine.POST("/api/vertifycha", mc.vertifyCaptcha) //校验验证码图片是否正确
+	//手机号+密码+验证码登录
+	engine.POST("/api/login_pwd", mc.nameLogin)
+}
+
+//手机号+密码+验证码登录
+func (mc *MemberController) nameLogin(context *gin.Context) {
+	//1.解析用户登录传递参数【去param里定义前端传递给我们参数的结构体】
+	var loginParam param.LoginParam
+	err := tool.Decode(context.Request.Body, &loginParam)
+	if err != nil {
+		tool.Failed(context, "参数解析失败1111")
+		return
+	}
+
+	//2.验证验证码
+	validate := tool.VertifyCaptcha(loginParam.Id, loginParam.Value)
+	if !validate {
+		tool.Failed(context, "验证码不正确，清重新验证")
+		return
+	}
+
+	//3.登录
+	ms := service.MemberService{}
+	//去MemberService里封装一个登录的方法
+	member := ms.Login(loginParam.Name, loginParam.Password)
+	if member.Id != 0 {
+		tool.Success(context, &member)
+		return
+	}
+
+	tool.Failed(context, "登录失败")
 }
 
 //生成验证码
-func (mc *MemberController) captcha(context *gin.Context){
+func (mc *MemberController) captcha(context *gin.Context) {
 	//todo:生成验证码图片
 	tool.GenerateCaptcha(context)
 }
 
 //验证验证码是否正确
-func (mc *MemberController) vertifyCaptcha(context *gin.Context){
+func (mc *MemberController) vertifyCaptcha(context *gin.Context) {
 	//接收客户端传输过来的参数
 	var captcha tool.CaptchaResult
 	err := tool.Decode(context.Request.Body, &captcha)
@@ -37,7 +68,7 @@ func (mc *MemberController) vertifyCaptcha(context *gin.Context){
 	}
 
 	result := tool.VertifyCaptcha(captcha.Id, captcha.VertifyValue)
-	if result{
+	if result {
 		fmt.Println("验证通过")
 	} else {
 		fmt.Println("验证失败")
@@ -78,7 +109,7 @@ func (mc *MemberController) sendSmsCode(context *gin.Context) {
 }
 
 //手机号+短信 登录的方法
-func (mc *MemberController) smsLogin(context *gin.Context)  {
+func (mc *MemberController) smsLogin(context *gin.Context) {
 	var smsLoginParam param.SmsLoginParam
 	//参数解析-调用tool.Decode函数进行body参数解析
 	err := tool.Decode(context.Request.Body, &smsLoginParam)
@@ -95,7 +126,7 @@ func (mc *MemberController) smsLogin(context *gin.Context)  {
 	us := service.MemberService{}
 	//调用服务下的登录方法
 	member := us.SmsLogin(smsLoginParam)
-	if member != nil{
+	if member != nil {
 		tool.Success(context, member)
 		return
 	}

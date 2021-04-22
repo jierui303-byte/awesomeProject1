@@ -6,7 +6,6 @@ import (
 )
 
 type JsonParse struct {
-
 }
 
 //封装一个参数解析方法
