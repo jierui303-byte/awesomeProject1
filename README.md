@@ -12,7 +12,7 @@ go version :1.16.3
 ~~~~
 
 ~~~~
-#session功能集成-安装session库
+#session功能集成-安装session库[session存储redis]
 `go get -u github.com/gin-contrib/sessions`
 `go get -u github.com/gin-contrib/sessions/redis`
 ~~~~
