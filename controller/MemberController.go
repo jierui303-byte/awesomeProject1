@@ -20,6 +20,14 @@ func (mc *MemberController) Router(engine *gin.Engine) {
 	engine.POST("/api/vertifycha", mc.vertifyCaptcha) //校验验证码图片是否正确
 	//手机号+密码+验证码登录
 	engine.POST("/api/login_pwd", mc.nameLogin)
+
+	//头像上传
+	engine.POST("/api/upload/avator", mc.uploadAvator)
+}
+
+//头像上传
+func (mc *MemberController) uploadAvator(context *gin.Context) {
+
 }
 
 //手机号+密码+验证码登录
