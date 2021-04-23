@@ -22,11 +22,12 @@ type MemberService struct {
 func (ms *MemberService) UploadAvator(userId int64, fileName string) string {
 	memberDao := dao.MemberDao{tool.DbEngine}
 	result := memberDao.UpdateMemberAvator(userId, fileName)
+	//更新失败
 	if result == 0 {
 		return ""
 	}
 
-	return result
+	return fileName
 }
 
 //定义 手机+密码+验证码登录的方法
