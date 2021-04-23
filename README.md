@@ -48,3 +48,12 @@ go version :1.16.3
 #安装最新版本验证码包会有部分函数不支持，需降到1.2.2版本
 `go mod edit -replace=github.com/mojocn/base64Captcha@v1.3.1=github.com/mojocn/base64Captcha@v1.2.2`
 ~~~~
+
+~~~~
+#fastDFS安装【分布式文件存储系统】
+1:fastDFS安装，配置和服务启动
+2:配置nginx模块
+3:go语言编程上传fastDFS
+#安装fastDFS包
+`go get -u github.com/tedcy/fdfs_client`
+~~~~

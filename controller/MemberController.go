@@ -7,6 +7,7 @@ import (
 	"awesomeProject1/tool"
 	"encoding/json"
 	"fmt"
+	"os"
 	"strconv"
 	"time"
 
@@ -25,7 +26,7 @@ func (mc *MemberController) Router(engine *gin.Engine) {
 	//手机号+密码+验证码登录
 	engine.POST("/api/login_pwd", mc.nameLogin)
 
-	//头像上传
+	//头像上传[上传到服务器本地]
 	engine.POST("/api/upload/avator", mc.uploadAvator)
 }
 
@@ -51,7 +52,7 @@ func (mc *MemberController) uploadAvator(context *gin.Context) {
 	//解析参数到member对象里面
 	json.Unmarshal(sess.([]byte), &member)
 
-	//3.file保存到本地
+	//3.【第一种方式】file保存到本地
 	fileName := "./uploadfile" + strconv.FormatInt(time.Now().Unix(), 10) + file.Filename //文件名生成规则
 	err = context.SaveUploadedFile(file, fileName)
 	if err != nil {
@@ -59,12 +60,30 @@ func (mc *MemberController) uploadAvator(context *gin.Context) {
 		return
 	}
 
+	//3.【第二种方式】把file上传到本地服务器上的fastDFS分布式文件存储系统中【封装一个上传fastDFS工具】
+	fileId := tool.UploadFileToDFS(fileName)
+	if fileId != "" {
+		//删除本地uplodfile下的文件
+		os.Remove(fileName)
+
+		//4.将保存后的文件本地路径 保存到用户表中的头像字段
+		//http://localhost:8090/static/.../devie.png
+		memberService := service.MemberService{}
+		path := memberService.UploadAvator(member.Id, fileId)
+		if path != "" {
+			//tool.Success(context, "http://localhost:8090"+path)
+			tool.Success(context, tool.FileServerAddr()+"/"+path)
+			return
+		}
+	}
+
 	//4.将保存后的文件本地路径 保存到用户表中的头像字段
 	//http://localhost:8090/static/.../devie.png
 	memberService := service.MemberService{}
 	path := memberService.UploadAvator(member.Id, fileName[1:])
 	if path != "" {
-		tool.Success(context, "http://localhost:8090"+path)
+		//tool.Success(context, "http://localhost:8090"+path)
+		tool.Success(context, tool.FileServerAddr()+"/"+path)
 		return
 	}
 	//5.返回结果

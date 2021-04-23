@@ -18,6 +18,7 @@ require (
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/micro/go-micro/v2 v2.9.1
 	github.com/mojocn/base64Captcha v1.2.2
+	github.com/tedcy/fdfs_client v0.0.0-20200106031142-21a04994525a // indirect
 	github.com/ugorji/go v1.2.5 // indirect
 	golang.org/x/crypto v0.0.0-20210421170649-83a5a9bb288b // indirect
 	golang.org/x/image v0.0.0-20210220032944-ac19c3e999fb // indirect
