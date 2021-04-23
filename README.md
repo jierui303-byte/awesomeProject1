@@ -3,12 +3,18 @@ go version :1.16.3
 
 ~~~~
 #本地项目绑定线上仓库
-git remote add origin git@github.com:jierui303-byte/go_gin_web
+`git remote add origin git@github.com:jierui303-byte/go_gin_web`
 ~~~~
 
 ~~~~
 #Gin包安装命令：
 `go get -u github.com/gin-gonic/gin`
+~~~~
+
+~~~~
+#session功能集成-安装session库
+`go get -u github.com/gin-contrib/sessions`
+`go get -u github.com/gin-contrib/sessions/redis`
 ~~~~
 
 
@@ -23,22 +29,22 @@ git remote add origin git@github.com:jierui303-byte/go_gin_web
 
 ~~~~
 #接入阿里云短信平台
-go get -u github.com/aliyun/alibaba-cloud-sdk-go
+`go get -u github.com/aliyun/alibaba-cloud-sdk-go`
 ~~~~
 
 ~~~~
 #安装xorm操作数据库的orm框架
-go get -u github.com/go-xorm/xorm
-go mod download github.com/jmespath/go-jmespat
-go get github.com/micro/go-micro/store/service
-go get github.com/micro/go-micro/v2/logger
-go mod download github.com/modern-go/concurrent
-go mod download gopkg.in/ini.v1
+`go get -u github.com/go-xorm/xorm`
+`go mod download github.com/jmespath/go-jmespat`
+`go get github.com/micro/go-micro/store/service`
+`go get github.com/micro/go-micro/v2/logger`
+`go mod download github.com/modern-go/concurrent`
+`go mod download gopkg.in/ini.v1`
 ~~~~
 
 ~~~~
 #图形验证码[支持生成的验证码自动存储redis以及验证码校验方式]
-go get -u github.com/mojocn/base64Captcha
+`go get -u github.com/mojocn/base64Captcha`
 #安装最新版本验证码包会有部分函数不支持，需降到1.2.2版本
-go mod edit -replace=github.com/mojocn/base64Captcha@v1.3.1=github.com/mojocn/base64Captcha@v1.2.2
+`go mod edit -replace=github.com/mojocn/base64Captcha@v1.3.1=github.com/mojocn/base64Captcha@v1.2.2`
 ~~~~

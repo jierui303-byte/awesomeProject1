@@ -34,6 +34,9 @@ func main() {
 	//设置全局跨域访问，调用中间件
 	app.Use(Cors())
 
+	//集成session-调用session初始化
+	tool.InitSession(app)
+
 	//路由调用
 	registerRouter(app)
 

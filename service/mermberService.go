@@ -18,6 +18,17 @@ import (
 type MemberService struct {
 }
 
+//头像上传操作
+func (ms *MemberService) UploadAvator(userId int64, fileName string) string {
+	memberDao := dao.MemberDao{tool.DbEngine}
+	result := memberDao.UpdateMemberAvator(userId, fileName)
+	if result == 0 {
+		return ""
+	}
+
+	return result
+}
+
 //定义 手机+密码+验证码登录的方法
 func (ms *MemberService) Login(name string, password string) *model.Member {
 	//两种情况：用户存在/用户为新用户

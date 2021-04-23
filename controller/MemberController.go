@@ -1,10 +1,14 @@
 package controller
 
 import (
+	"awesomeProject1/model"
 	"awesomeProject1/param"
 	"awesomeProject1/service"
 	"awesomeProject1/tool"
+	"encoding/json"
 	"fmt"
+	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -27,7 +31,44 @@ func (mc *MemberController) Router(engine *gin.Engine) {
 
 //头像上传
 func (mc *MemberController) uploadAvator(context *gin.Context) {
+	//1.解析上传的参数：file
+	userId := context.PostForm("user_id") //从postfrom接收参数
+	fmt.Println(userId)
+	file, err := context.FormFile("avator") //从formfile接收图片数据
+	if err != nil {
+		tool.Failed(context, "参数解析失败")
+		return
+	}
 
+	//2.判断user_id对应的用户是否已经登录
+	sess := tool.GetSession(context, "user_"+userId) //获取session
+	if sess == nil {
+		tool.Failed(context, "参数不合法")
+		return
+	}
+
+	var member model.Member
+	//解析参数到member对象里面
+	json.Unmarshal(sess.([]byte), &member)
+
+	//3.file保存到本地
+	fileName := "./uploadfile" + strconv.FormatInt(time.Now().Unix(), 10) + file.Filename //文件名生成规则
+	err = context.SaveUploadedFile(file, fileName)
+	if err != nil {
+		tool.Failed(context, "头像更新失败")
+		return
+	}
+
+	//4.将保存后的文件本地路径 保存到用户表中的头像字段
+	//http://localhost:8090/static/.../devie.png
+	memberService := service.MemberService{}
+	path := memberService.UploadAvator(member.Id, fileName[1:])
+	if path != "" {
+		tool.Success(context, "http://localhost:8090"+path)
+		return
+	}
+	//5.返回结果
+	tool.Failed(context, "上传失败")
 }
 
 //手机号+密码+验证码登录
@@ -52,6 +93,14 @@ func (mc *MemberController) nameLogin(context *gin.Context) {
 	//去MemberService里封装一个登录的方法
 	member := ms.Login(loginParam.Name, loginParam.Password)
 	if member.Id != 0 {
+		//用户信息保存到session
+		sess, _ := json.Marshal(member)
+		err := tool.SetSession(context, "user_"+string(member.Id), sess)
+		if err != nil {
+			tool.Failed(context, "登录失败")
+			return
+		}
+
 		tool.Success(context, &member)
 		return
 	}
@@ -135,6 +184,14 @@ func (mc *MemberController) smsLogin(context *gin.Context) {
 	//调用服务下的登录方法
 	member := us.SmsLogin(smsLoginParam)
 	if member != nil {
+		//用户信息保存到session
+		sess, _ := json.Marshal(member)
+		err := tool.SetSession(context, "user_"+string(member.Id), sess)
+		if err != nil {
+			tool.Failed(context, "登录失败")
+			return
+		}
+
 		tool.Success(context, member)
 		return
 	}
