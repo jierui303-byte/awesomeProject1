@@ -54,7 +54,7 @@ func registerRouter(router *gin.Engine) {
 	//foodCategory食品类控制器
 	new(controller.FoodCategoryController).Router(router)
 
-	//shop控制器
+	//shop控制器-有用到事务的批量插入
 	new(controller.ShopController).Router(router)
 }
 
