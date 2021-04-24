@@ -43,7 +43,7 @@ func main() {
 	app.Run(cfg.APPHost + ":" + cfg.APPPort)
 }
 
-//路由设置
+//路由设置-注册路由
 func registerRouter(router *gin.Engine) {
 	//hello控制器
 	new(controller.HelloController).Router(router)
