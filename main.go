@@ -53,6 +53,9 @@ func registerRouter(router *gin.Engine) {
 
 	//foodCategory食品类控制器
 	new(controller.FoodCategoryController).Router(router)
+
+	//shop控制器
+	new(controller.ShopController).Router(router)
 }
 
 //跨域访问中间件：cross origin resource share
